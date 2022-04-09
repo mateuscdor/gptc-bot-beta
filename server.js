@@ -8,12 +8,7 @@ const moment = require("moment-timezone");
 const { state, saveState } = useSingleFileAuthState('./sesson.json');
 
 
-
-
 async function BlackSudo () {
-
-    
-
 
     const { version, isLatest } = await fetchLatestBaileysVersion();
 	console.log(`Using: ${version}, newer: ${isLatest}`);
@@ -22,10 +17,10 @@ async function BlackSudo () {
 		auth: state,
 		logger: Pino({ level: "silent" }),
 		version: version,
-        browser: ['BlackSudo', 'safari','3.0'],
+        	browser: ['BlackSudo', 'safari','3.0'],
 	});
     Ammu.ev.on("creds.update", saveState);
-	Ammu.ev.on("connection.update", async (up) => {
+    Ammu.ev.on("connection.update", async (up) => {
 		const { lastDisconnect, connection } = up;
 		if (connection) {
 			console.log("Connection Status: ",connection);
@@ -110,9 +105,7 @@ async function BlackSudo () {
                 case 'hlo':
                 case 'hey':
                 case 'hello':
-                    const himsg = 'Hey @'+pushname+' '+wish+'\n'+ihr+':'+min+':'+sec+' '+ampm;
-                    Ammu.sendMessage(from, { text: himsg});
-                    Ammu.sendMessage({ text: '@12345678901', mentions: ['12345678901@s.whatsapp.net'] })
+                     Ammu.sendMessage(from, { text: 'Hey @'+sender.split('@')[0]+' Type menu to get info', mentions: [sender] });
                 break
                 case 'log':
                     console.log(pushname);
@@ -151,6 +144,7 @@ async function BlackSudo () {
                 case 'departments':
                 case 'course':
                 case 'courses':
+		    case 'menu':
                     const sections = [
                         {
                             title: "Departments",
