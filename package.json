@@ -1,0 +1,38 @@
+{
+  "name": "gptc-bot",
+  "version": "1.0.0",
+  "description": "bot for gptc perumbavoor",
+  "main": "./server.js",
+  "scripts": {
+    "test": "node server.js",
+    "start": "supervisor -s server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ajay-o-s/gptc-bot-beta.git"
+  },
+  "keywords": [
+    "bot",
+    "ai",
+    "beta"
+  ],
+  "author": "Ajay o s , BlackSudo , Team-BlackSudo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ajay-o-s/gptc-bot-beta/issues"
+  },
+  "homepage": "https://github.com/Ajay-o-s/gptc-bot-beta#readme",
+  "dependencies": {
+    "@adiwajshing/baileys": "^4.1.0",
+    "@hapi/boom": "^9.1.4",
+    "axios": "^0.26.1",
+    "chalk": "^5.0.1",
+    "fluent-ffmpeg": "^2.1.2",
+    "moment-timezone": "^0.5.34",
+    "pino": "^7.9.2",
+    "qrcode": "^1.5.0",
+    "qrcode-terminal": "^0.12.0",
+    "request": "^2.88.2",
+    "supervisor": "^0.12.0"
+  }
+}
