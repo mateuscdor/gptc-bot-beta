@@ -1,2 +1,2 @@
 # gptc-bot-beta
-This whatsapp beta bot for my collage site
+This whatsapp beta bot for my college site
