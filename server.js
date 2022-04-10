@@ -6,6 +6,7 @@ const fs = require('fs');
 const axios = require("axios");
 const moment = require("moment-timezone");
 const { state, saveState } = useSingleFileAuthState('./sesson.json');
+const desmsg = '꧁༺𝗚𝗣𝗧𝗖𖣘𝗣𝗘𝗥𝗨𝗠𝗕𝗔𝗩𝗢𝗢𝗥༻꧂'
 
 
 async function BlackSudo () {
@@ -127,7 +128,7 @@ async function BlackSudo () {
             
                     const templateMessage = {
                         text: "GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR\n\nPhone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala",
-                        footer: '©️BlackSudo',
+                        footer: desmsg,
                         templateButtons: templateButtons
                     }
                     Ammu.sendMessage(from, templateMessage,{quoted: msg });
@@ -168,7 +169,7 @@ async function BlackSudo () {
                     ]
                     const listMessage = {
                        text: 'Phone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala',
-                       footer: "©️BlackSudo",
+                       footer: desmsg,
                        title: "GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR",
                        buttonText: "Departments",
                        sections
@@ -183,7 +184,7 @@ async function BlackSudo () {
                     ]
                     const gendepbuttonMessage = {
                             text: "\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n\n*❏ Institution Mission*\n⚫ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⚫ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
-                            footer: '©️BlackSudo',
+                            footer: desmsg,
                             buttons: gendepbutton,
                             headerType: 1
                     }
@@ -197,7 +198,7 @@ async function BlackSudo () {
                     const comenbuttonMessage = {
                         image: {url: 'images/CT.jpg'},
                         caption: "\n*COMPUTER ENGINEERING*\nThe Computer Engineering Department was established in the year 1995. The department offers a three-year Diploma in Computer Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n*❏ Infrastructural Facilities*\nThe department is housed in Computer Engineering block with\n⚫ Well-appointed three numbers of classrooms.\n⚫ Five numbers of well-equipped laboratories\n\n*❏ Vision of the Department*\nExcel as a center of skill education in Computer Engineering moulding professionals who sincerely strive for the betterment of themselves and society.\n*❏ Mission of the Department*\n⚫ To impart state of the art, knowledge, skill and attitude to the graduates ensuring sustainable development.\n⚫ To develop adaptiveness for being competent to acquaint with the technological changes.",
-                        footerText: '©️BlackSudo',
+                        footerText: desmsg,
                         buttons: comenbutton,
                         headerType: 4
                     }
@@ -211,7 +212,7 @@ async function BlackSudo () {
                     const ecenbuttonMessage = {
                         image: {url: 'images/EC.jpg'},
                         caption: "\n*Electronics & Communication Engineering*\nThe Electronics and Communication Engineering Department was established in the year 1995. The department offers a three-year Diploma in Electronics and Communication Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n\n*❏ Infrastructural Facilities*\nThe department is housed in Academic Block - 1 with\n⚫ Well-appointed three numbers of classrooms.\n⚫ Mini seminar hall with online conferencing facility\n⚫ Six numbers well-equipped laboratories\n\n*❏ Services Offered*\n\nProduction and Training Center (PAT)\nPAT is a project of the Department of Technical Education. PAT currently manufactures AVR trainer kits and 8051 trainer kits. These kits are currently being used by the majority of Polytechnic Colleges in the state.\n\n*❏ Self-Maintenance Cell (SMC)*\nSelf-maintenance Cell offers technical support by way of maintenance and repair of electronic equipment and computers of various departments. These services are now offered to other government and private organizations as outreach programs. Construction of a new academic block for the department for an estimated cost of Rs. 12 crores is in progress",
-                        footerText: '©️BlackSudo',
+                        footerText: desmsg,
                         buttons: ecenbutton,
                         headerType: 4
                     }
@@ -224,7 +225,7 @@ async function BlackSudo () {
                     ]
                     const meenbuttonMessage = {
                         text: "\n*MECHANICAL ENGINEERING*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⚫ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⚫ To apply technology in the traditional skills, thereby enhancing the living standard of the community.\n*❏ Mechanical Engineering Vision*\nExcel as a centre of skill education in mechanical engineering moulding professionals who strive for the betterment of society\n*❏ Mechanical Engineering Mission*\n⚫ Provide state of art knowledge, skill and transform the students into responsible professionals for the sustainable development of society.\n⚫ Provide good infrastructure facilities so that students will gain hands on experience by using various equipment and software.\n⚫ Inculcate the habit of self-learning to enhance the employability.",
-                        footer: '©️BlackSudo',
+                        footer: desmsg,
                         buttons: meenbutton,
                         headerType: 1
                     }
@@ -237,7 +238,7 @@ async function BlackSudo () {
                     ]
                     const genwkshbuttonMessage = {
                         text: "\n*WORKSHOP*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⚫ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⚫ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
-                        footer: '©️BlackSudo',
+                        footer: desmsg,
                         buttons: genwkshbutton,
                         headerType: 1
                     }
@@ -251,7 +252,7 @@ async function BlackSudo () {
             
                     const weblink_templateMessage = {
                         text: "GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR\n\nPhone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala",
-                        footer: '©️BlackSudo',
+                        footer: desmsg,
                         templateButtons: weblink_templateButtons
                     }
                     Ammu.sendMessage(from, weblink_templateMessage,{quoted: msg });
