@@ -67,14 +67,14 @@ async function BlackSudo () {
             const cmd = (type === 'conversation' && msg.message.conversation) ? msg.message.conversation : (type == 'imageMessage') && msg.message.imageMessage.caption ? msg.message.imageMessage.caption : (type == 'documentMessage') && msg.message.documentMessage.caption ? msg.message.documentMessage.caption : (type == 'videoMessage') && msg.message.videoMessage.caption ? msg.message.videoMessage.caption : (type == 'extendedTextMessage') && msg.message.extendedTextMessage.text ? msg.message.extendedTextMessage.text : (type == 'buttonsResponseMessage' && msg.message.buttonsResponseMessage.selectedButtonId) ? msg.message.buttonsResponseMessage.selectedButtonId : (type == 'templateButtonReplyMessage') && msg.message.templateButtonReplyMessage.selectedId ? msg.message.templateButtonReplyMessage.selectedId : (type === 'listResponseMessage' && msg.message.listResponseMessage.title) ? msg.message.listResponseMessage.title : "";
             const body = (type === 'conversation') ? msg.message.conversation : (type == 'imageMessage') ? msg.message.imageMessage.caption : (type == 'videoMessage') ? msg.message.videoMessage.caption : (type == 'extendedTextMessage') ? msg.message.extendedTextMessage.text : (type == 'buttonsResponseMessage') ? msg.message.buttonsResponseMessage.selectedButtonId : (type == 'listResponseMessage') ? msg.message.listResponseMessage.singleSelectReply.selectedRowId : (type == 'templateButtonReplyMessage') ? msg.message.templateButtonReplyMessage.selectedId : (type === 'messageContextInfo') ? (msg.message.buttonsResponseMessage?.selectedButtonId || msg.message.listResponseMessage?.singleSelectReply.selectedRowId || (type == 'listResponseMessage' ? msg.msg.singleSelectReply.selectedRowId : '') || msg.msg.text || msg.msg.caption || msg.msg || '') : '';
             const budy = (type === 'conversation') ? msg.message.conversation : (type === 'extendedTextMessage') ? msg.message.extendedTextMessage.text : '';
-            const command = body.trim().split(/ +/).shift().toLowerCase();
+            const message = body.trim().split(/ +/).shift().toLowerCase();
             const args = body.trim().split(/ +/).slice(1);
             const botNumber = Ammu.user.id.split(':')[0] + '@s.whatsapp.net';
-            const owners = ['919188346721@s.whatsapp.net','917510153501@s.whatsapp.net'];
             const isGroup = from.endsWith('@g.us');
             const sender = isGroup ? (msg.key.participant ? msg.key.participant : msg.participant) : msg.key.remoteJid;
-            const isOwner = owners.includes(sender);
-            const pushname =   sender.split('@')[0]  // msg.pushName === undefined ? from.split('@')[0] : msg.pushName;
+            const sudon = ['919188346721','917510153501','919562388758'];
+            const SUDO = sudon.includes(sender.split('@')[0]); //sender.split('@')[0] == '919188346721' || sender.split('@')[0] == '917510153501'
+            const pushname = sender.split('@')[0]  // msg.pushName === undefined ? from.split('@')[0] : msg.pushName;
 
             var d = new Date();
             const hrs = d.getHours().toString().padStart(2, 0);
@@ -100,33 +100,49 @@ async function BlackSudo () {
 	        var ge = Math.floor(ge_len*Math.random());
             var wish = hrs < 12 ? gm_text[gm] : hrs <= 17 ? gf_text[gf] : hrs <= 19 ? ge_text[ge] : hrs <= 24 ? gn_text[gn] : gm_text[gm]
 		   
-            switch (command) {
 
+            function sleep(m) {
+                return new Promise(r => setTimeout(r, m*60000));
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            switch (message) {
                 case 'hi':
                 case 'hlo':
                 case 'hey':
                 case 'hello':
-                     Ammu.sendMessage(from, { text: 'Hey @'+sender.split('@')[0]+' Type menu to get info', mentions: [sender] });
+                    Ammu.sendMessage(from, { text: 'Hey @'+sender.split('@')[0]+' Type menu to get info', mentions: [sender] });                     
                 break
                 case 'log':
-                    console.log(pushname);
+                    if (!SUDO) return
+                    console.log(pushname,msg.pushName,msg.key.remoteJid);
                     Ammu.sendMessage(from, { text: '@'+pushname});
                 break
                 case 'num':
                 case 'number':
-                    const vcard = 'BEGIN:VCARD\n'+ 'VERSION:3.0\n'+ `FN:GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR\n`+ `ORG: GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR ;\n`+ `TEL;type=CELL;type=VOICE;waid=04842649251:04842649251\n`+ 'END:VCARD'.trim()
-                     Ammu.sendMessage(from, { contacts: { displayName: 'GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR', contacts: [{ vcard }]}},{quoted: msg });
+                    var vcard = 'BEGIN:VCARD\n'+ 'VERSION:3.0\n'+ `FN:GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR\n`+ `ORG: GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR ;\n`+ `TEL;type=CELL;type=VOICE;waid=04842649251:04842649251\n`+ 'END:VCARD'.trim()
+                    Ammu.sendMessage(from, { contacts: { displayName: 'GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR', contacts: [{ vcard }]}},{quoted: msg });
                 break
                 case 'condact':
                 case 'info':
-                    const templateButtons = [
+                    var templateButtons = [
                         {index: 1, urlButton: {displayText: 'WEBSITE', url: 'https://gptcperumbavoor.ac.in'}},
                         {index: 2, callButton: {displayText: 'NUMBER', phoneNumber: '0484-2649251'}},
                         {index: 3, urlButton: {displayText: 'MAP', url: 'https://www.google.com/maps/place/Government+Polytechnic+College,+Perumbavoor/@10.1447946,76.4534265,13z/data=!4m5!3m4!1s0x0:0x47fd460af5bb0b36!8m2!3d10.1500656!4d76.4759264'}},
                         {index: 4, urlButton: {displayText: 'MAIL', url: 'gptcpbvr@gmail.com'}},
                     ]
             
-                    const templateMessage = {
+                    var templateMessage = {
                         text: "GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR\n\nPhone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala",
                         footer: desmsg,
                         templateButtons: templateButtons
@@ -134,19 +150,19 @@ async function BlackSudo () {
                     Ammu.sendMessage(from, templateMessage,{quoted: msg });
                 break
                 case 'like':
-                        const reactionMessage = {
+                        var reactionMessage = {
                             react: {
                                 text: "💖",
                                 key: msg.key
                             }
-                        }      
+                        }
                     Ammu.sendMessage(from, reactionMessage);
                 break
                 case 'departments':
                 case 'course':
                 case 'courses':
-		    case 'menu':
-                    const sections = [
+		        case 'menu':
+                    var sections = [
                         {
                             title: "Departments",
                             rows: [
@@ -161,13 +177,14 @@ async function BlackSudo () {
                         {
                             title: "ABOUT",
                             rows: [
+                                {title: "OFFICE", rowId: "office"},
                                 {title: "WEBSITE", rowId: "weblink"},
                                 {title: "Departments", rowId: "departments"},
                                 {title: "INFO", "rowId": "info"},
                            ]
                         },
                     ]
-                    const listMessage = {
+                    var listMessage = {
                        text: 'Phone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala',
                        footer: desmsg,
                        title: "GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR",
@@ -177,12 +194,102 @@ async function BlackSudo () {
                  
                     Ammu.sendMessage(from, listMessage);
                 break
+                case '.genaraladmin':
+                case 'office':
+                case 'staff':
+                case 'staffs':
+                    var  sections = [
+                        {
+                            title: "STAFFS",
+                            rows: [
+                                {title: "Dr. AIJU THOMAS", rowId: "principal", description: "Principal"},
+                                {title: "BABU PRADEEP", rowId: "seniorsuperintendent",  description: "Senior Superintendent"},
+                                {title: "LISSY K K", rowId: "headaccountant",  description: "Head Accountant"},
+                                {title: "Jini A R", "rowId": "seniorclerk",   description: "Senior clerk"},
+                            ] 
+                        },
+                    ]
+                    var listMessage = {
+                        text: 'The college is established by Higher Education Department of Government of Kerala under Department of Technical Education. Hierarchy of Governance is as shown below.\n\nPhone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala',
+                        footer: desmsg,
+                        title: "*OFFICE*",
+                        buttonText: "STAFFS",
+                        sections
+                    }
+                    Ammu.sendMessage(from, listMessage);
+                break
+                case 'principal':
+                    var templateButtons = [ 
+                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919447388010'}},
+                        {index: 2, urlButton:  {displayText: 'Email-id', url: 'mailto:aiju.thomas@gmail.com'}},
+                    ] 
+                    var buttonMessage = {
+                        image: {url: 'images/53.jpg'},
+                        caption: "         *Dr. AIJU THOMAS*\n❏ Designation : Principal\n",
+                        footerText: desmsg,
+                        templateButtons: templateButtons,
+                        headerType: 4
+                    }
+
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    await sleep(1)
+                    await Ammu.sendMessage(from, { delete: sendMsg.key }); 
+                break
+                case 'seniorsuperintendent':
+                    var templateButtons = [ 
+                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919446684378'}},
+                    ] 
+                    var buttonMessage = {
+                        image: {url: 'images/55.jpg'},
+                        caption: "         *BABU PRADEEP*\n❏ Designation : Senior Superintendent\n",
+                        footerText: desmsg,
+                        templateButtons: templateButtons,
+                        headerType: 4
+                    }
+
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    await sleep(1)
+                    await Ammu.sendMessage(from, { delete: sendMsg.key }); 
+                break
+                case 'headaccountant':
+                    var templateButtons = [ 
+                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919495424817'}},
+                    ] 
+                    var buttonMessage = {
+                        image: {url: 'images/56.jpg'},
+                        caption: "         *LISSY K K*\n❏ Designation : Head Accountant\n",
+                        footerText: desmsg,
+                        templateButtons: templateButtons,
+                        headerType: 4
+                    }
+
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    await sleep(1)
+                    await Ammu.sendMessage(from, { delete: sendMsg.key }); 
+                break
+                case 'seniorclerk':
+                    var templateButtons = [ 
+                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919562857224'}},
+                        {index: 2, urlButton:  {displayText: 'Email-id', url: 'mailto:arjiniprasad@gmail.com'}},
+                    ] 
+                    var buttonMessage = {
+                        image: {url: 'images/14.jpg'},
+                        caption: "         *Jini A R*\n❏ Designation : Senior clerk\n❏ Qualifications  :  Diploma in Electronics Production Technology\n",
+                        footerText: desmsg,
+                        templateButtons: templateButtons,
+                        headerType: 4
+                    }
+
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    await sleep(1)
+                    await Ammu.sendMessage(from, { delete: sendMsg.key }); 
+                break
                 case '.gendep':
-                    const gendepbutton = [
+                    var gendepbutton = [
                           {buttonId: 'info', buttonText: {displayText: 'INFO'}, type: 1},
                           {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
                     ]
-                    const gendepbuttonMessage = {
+                    var gendepbuttonMessage = {
                             text: "\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n\n*❏ Institution Mission*\n⚫ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⚫ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
                             footer: desmsg,
                             buttons: gendepbutton,
@@ -191,27 +298,27 @@ async function BlackSudo () {
                     Ammu.sendMessage(from, gendepbuttonMessage);
                 break
                 case '.comen':
-                    const comenbutton = [
+                    var comenbutton = [
                         {buttonId: 'info', buttonText: {displayText: 'INFO'}, type: 1},
                         {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
                     ]
-                    const comenbuttonMessage = {
+                    var comenbuttonMessage = {
                         image: {url: 'images/CT.jpg'},
                         caption: "\n*COMPUTER ENGINEERING*\nThe Computer Engineering Department was established in the year 1995. The department offers a three-year Diploma in Computer Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n*❏ Infrastructural Facilities*\nThe department is housed in Computer Engineering block with\n⚫ Well-appointed three numbers of classrooms.\n⚫ Five numbers of well-equipped laboratories\n\n*❏ Vision of the Department*\nExcel as a center of skill education in Computer Engineering moulding professionals who sincerely strive for the betterment of themselves and society.\n*❏ Mission of the Department*\n⚫ To impart state of the art, knowledge, skill and attitude to the graduates ensuring sustainable development.\n⚫ To develop adaptiveness for being competent to acquaint with the technological changes.",
                         footerText: desmsg,
                         buttons: comenbutton,
                         headerType: 4
                     }
-                  Ammu.sendMessage(from, comenbuttonMessage);
+                    Ammu.sendMessage(from, comenbuttonMessage);
                 break
                 case '.ecen':
-                    const ecenbutton = [
+                    var ecenbutton = [
                         {buttonId: 'info', buttonText: {displayText: 'INFO'}, type: 1},
                         {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
                     ]
-                    const ecenbuttonMessage = {
+                    var ecenbuttonMessage = {
                         image: {url: 'images/EC.jpg'},
-                        caption: "\n*Electronics & Communication Engineering*\nThe Electronics and Communication Engineering Department was established in the year 1995. The department offers a three-year Diploma in Electronics and Communication Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n\n*❏ Infrastructural Facilities*\nThe department is housed in Academic Block - 1 with\n⚫ Well-appointed three numbers of classrooms.\n⚫ Mini seminar hall with online conferencing facility\n⚫ Six numbers well-equipped laboratories\n\n*❏ Services Offered*\n\nProduction and Training Center (PAT)\nPAT is a project of the Department of Technical Education. PAT currently manufactures AVR trainer kits and 8051 trainer kits. These kits are currently being used by the majority of Polytechnic Colleges in the state.\n\n*❏ Self-Maintenance Cell (SMC)*\nSelf-maintenance Cell offers technical support by way of maintenance and repair of electronic equipment and computers of various departments. These services are now offered to other government and private organizations as outreach programs. Construction of a new academic block for the department for an estimated cost of Rs. 12 crores is in progress",
+                        caption: "\n*Electronics & Communication Engineering*\nThe Electronics and Communication Engineering Department was established in the year 1995. The department offers a three-year Diploma in Electronics and Communication Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n\n*❏ Infrastructural Facilities*\nThe department is housed in Academic Block - 1 with\n⚫ Well-appointed three numbers of classrooms.\n⚫ Mini seminar hall with online conferencing facility\n⚫ Six numbers well-equipped laboratories\n\n*❏ Services Offered*\n\nProduction and Training Center (PAT)\nPAT is a project of the Department of Technical Education. PAT currently manufactures AVR trainer kits and 8051 trainer kits. These kits are currently being used by the majority of Polytechnic Colleges in the state.\n\n*❏ Self-Maintenance Cell (SMC)*\nSelf-maintenance Cell offers technical support by way of maintenance and repair of electronic equipment and computers of various departments. These services are now offered to other government and private organizations as outreach programs. varruction of a new academic block for the department for an estimated cost of Rs. 12 crores is in progress",
                         footerText: desmsg,
                         buttons: ecenbutton,
                         headerType: 4
@@ -219,11 +326,11 @@ async function BlackSudo () {
                     Ammu.sendMessage(from, ecenbuttonMessage);
                 break
                 case '.meen':
-                    const meenbutton = [
+                    var meenbutton = [
                         {buttonId: 'info', buttonText: {displayText: 'INFO'}, type: 1},
                         {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
                     ]
-                    const meenbuttonMessage = {
+                    var meenbuttonMessage = {
                         text: "\n*MECHANICAL ENGINEERING*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⚫ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⚫ To apply technology in the traditional skills, thereby enhancing the living standard of the community.\n*❏ Mechanical Engineering Vision*\nExcel as a centre of skill education in mechanical engineering moulding professionals who strive for the betterment of society\n*❏ Mechanical Engineering Mission*\n⚫ Provide state of art knowledge, skill and transform the students into responsible professionals for the sustainable development of society.\n⚫ Provide good infrastructure facilities so that students will gain hands on experience by using various equipment and software.\n⚫ Inculcate the habit of self-learning to enhance the employability.",
                         footer: desmsg,
                         buttons: meenbutton,
@@ -232,11 +339,11 @@ async function BlackSudo () {
                     Ammu.sendMessage(from, meenbuttonMessage);
                 break
                 case '.genwksh':
-                    const genwkshbutton = [
+                    var genwkshbutton = [
                         {buttonId: 'info', buttonText: {displayText: 'INFO'}, type: 1},
                         {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
                     ]
-                    const genwkshbuttonMessage = {
+                    var genwkshbuttonMessage = {
                         text: "\n*WORKSHOP*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⚫ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⚫ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
                         footer: desmsg,
                         buttons: genwkshbutton,
@@ -245,18 +352,18 @@ async function BlackSudo () {
                   Ammu.sendMessage(from, genwkshbuttonMessage);
                 break
                 case 'weblink':
-                    const weblink_templateButtons = [
+                    var weblink_templateButtons = [
                         {index: 1, urlButton: {displayText: 'WEBSITE', url: 'https://gptcperumbavoor.ac.in'}},
                         {index: 4, urlButton: {displayText: 'MAIL', url: 'mailto:gptcpbvr@gmail.com'}},
                     ]
-            
-                    const weblink_templateMessage = {
+                
+                    var weblink_templateMessage = {
                         text: "GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR\n\nPhone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala",
                         footer: desmsg,
                         templateButtons: weblink_templateButtons
                     }
                     Ammu.sendMessage(from, weblink_templateMessage,{quoted: msg });
-                break
+                break    
 
                 default:
             }
