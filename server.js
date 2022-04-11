@@ -6,7 +6,8 @@ const fs = require('fs');
 const axios = require("axios");
 const moment = require("moment-timezone");
 const { state, saveState } = useSingleFileAuthState('./sesson.json');
-const desmsg = '꧁༺𝗚𝗣𝗧𝗖𖣘𝗣𝗘𝗥𝗨𝗠𝗕𝗔𝗩𝗢𝗢𝗥༻꧂'
+const desmsg = '*꧁༺𝗚𝗣𝗧𝗖𖣘𝗣𝗘𝗥𝗨𝗠𝗕𝗔𝗩𝗢𝗢𝗥༻꧂*'
+
 
 
 async function BlackSudo () {
@@ -71,10 +72,12 @@ async function BlackSudo () {
             const args = body.trim().split(/ +/).slice(1);
             const botNumber = Ammu.user.id.split(':')[0] + '@s.whatsapp.net';
             const isGroup = from.endsWith('@g.us');
+
+            await Ammu.sendPresenceUpdate('unavailable', from)
             const sender = isGroup ? (msg.key.participant ? msg.key.participant : msg.participant) : msg.key.remoteJid;
             const sudon = ['919188346721','917510153501','919562388758'];
             const SUDO = sudon.includes(sender.split('@')[0]); //sender.split('@')[0] == '919188346721' || sender.split('@')[0] == '917510153501'
-            const pushname = sender.split('@')[0]  // msg.pushName === undefined ? from.split('@')[0] : msg.pushName;
+            const pushname = msg.pushName === undefined ? from.split('@')[0] : msg.pushName; // sender.split('@')[0] 
 
             var d = new Date();
             const hrs = d.getHours().toString().padStart(2, 0);
@@ -86,43 +89,101 @@ async function BlackSudo () {
             const ampm = hrs >= 12 ? 'PM' : 'AM';
             const ihra = ['12','1','2','3','4','5','6','7','8','9','10','11','12','1','2','3','4','5','6','7','8','9','10','11','12'];
             const ihr = ihra[hrs];
-            const gn_text = ["😘𝙂𝙤𝙤𝙙 🙈𝙣𝙞𝙜𝙝𝙩 💫✨","🤗𝓖𝓸𝓸𝓭 🧚‍♀𝓷𝓲𝓰𝓱𝓽 ❄️✨","🌌❡០០ᖱ 🌙⩎ɨ❡ϦƬ 🌎","😘ցօօժ ⭐️ղíցհԵ 💝","🌃Ꮐᝪᝪᗞ 🙈ᑎᏆᏀᕼᎢ 💫✨","꧁༒♛ good nιgнт ♛༒꧂","𝓰𝓸𝓸𝓭 𝓷𝓲𝓰𝓱𝓽💕","ğôõd○ňîğht♧◇♤♡", "¥${☆.ĞØĐĎ ÑÎĢHŤ.☆}$¥", "❤️* *ǤØØĐ ŇƗǤĦŦ* *❤️💕🥰", "•𝓝𝓲𝓰𝓱𝓽☾", "꧁༺ ***** *ǤØØĐ ŇƗǤĦŦ*  ***** ༻", "❀◕ ‿ ◕❀₲ØØĐ ℕ𝕀𝔾𝕙𝕋❀◕ ‿ ◕❀", "🍃ᴳᴼᴼᴰ🍁ɴɪɢʜᴛ🥀", "GᴏᴏᴅNɪɢʜᴛ ☾", "꧁꧁✞ঔৣ۝☬  ☬۝ঔৣ🅶🅾🅾🅳🅽🅸🅶🅷", "●●●●●●♤♡ğøøđ ňīğhț♤♡●●●●●●●》》", "~*⏥____♡|•गुᴅ͢• • 🇳𝐈𝐆𝐇𝐓⃠•", "Good▄︻̷̿┻̿═━一night", "❤️ 𝔾𝕠𝕠𝕕 ℕ𝕚𝕘𝕙𝕥 ❤️", "♥●❥╚»♛«╝ 𝙣𝙞𝙜𝙝𝙩 ╚»♛«╝●❥♥", "•.,¸¸,.•¯💖 *Ǥ𝕠όᵈ 𝓝𝔦ⒼнŦ*", "ทۖ เ🅖█▬█ 𝔱", "✨𝔾𝕠𝕠𝕕 ℕ𝕚𝕘𝕙𝕥 ☽⋆✨", "GOoDnIgHt😗💛", "G⚫⚫D...NI:GHT", "♡✨ǤØØĐ ŇƗǤĦŦ✨♡", "♡ĞØØĐ ŇĪĞHȚ♡", "||____G⭕⭕d Night____||", "♡▪G•O•O•D~N•I•G•H•T▪♡", "●⃝ᶫᵒꪜe☯ᴳᶹʳᶹ᭄●⁴³", "❤️* *ǤØØĐ ŇƗǤĦŦ* *",  "•°•°•°GOOD NIGHT°•°•°•", "❤️good night✨⚡", "ᴳᴼᴼᴰ|ɴɪɢʜᴛ⋆", "Night ❤️💕🥰", "🍃ᴳᴼᴼᴰ🍁ɴɪɢʜᴛ", "Good Night 😴😴", "°~||...♪♪G∅∅D Π¡gH†♪♪...||~°", "Good night 😴🥱", "👻 Good Night 👻"];
+            const gn_text = ["😘𝙂𝙤𝙤𝙙 🙈𝙣𝙞𝙜𝙝𝙩 💫✨","🤗𝓖𝓸𝓸𝓭 🧚‍♀𝓷𝓲𝓰𝓱𝓽 ❄️✨","🌌❡០០ᖱ 🌙⩎ɨ❡ϦƬ 🌎","😘ցօօժ ⭐️ղíցհԵ 💝","🌃Ꮐᝪᝪᗞ 🙈ᑎᏆᏀᕼᎢ 💫✨","꧁༒♛ good nιgнт ♛༒꧂","𝓰𝓸𝓸𝓭 𝓷𝓲𝓰𝓱𝓽💕","ğôõd○ňîğht♧◇♤♡", "¥${☆.ĞØĐĎ ÑÎĢHŤ.☆}$¥", "❤️* *ǤØØĐ ŇƗǤĦŦ* *❤️💕🥰", "•𝓝𝓲𝓰𝓱𝓽☾", "꧁༺ ***** *ǤØØĐ ŇƗǤĦŦ*  ***** ༻", "❀◕ ‿ ◕❀₲ØØĐ ℕ𝕀𝔾𝕙𝕋❀◕ ‿ ◕❀", "🍃ᴳᴼᴼᴰ🍁ɴɪɢʜᴛ🥀", "GᴏᴏᴅNɪɢʜᴛ ☾", "꧁꧁✞ঔৣ۝☬  ☬۝ঔৣ🅶🅾🅾🅳🅽🅸🅶🅷", "●●●●●●♤♡ğøøđ ňīğhț♤♡●●●●●●●》》", "~*⏥____♡|•गुᴅ͢• • 🇳𝐈𝐆𝐇𝐓⃠•", "Good▄︻̷̿┻̿═━一night", "❤️ 𝔾𝕠𝕠𝕕 ℕ𝕚𝕘𝕙𝕥 ❤️", "♥●❥╚»♛«╝ 𝙣𝙞𝙜𝙝𝙩 ╚»♛«╝●❥♥", "•.,¸¸,.•¯💖 *Ǥ𝕠όᵈ 𝓝𝔦ⒼнŦ*", "ทۖ เ🅖█▬█ 𝔱", "✨𝔾𝕠𝕠𝕕 ℕ𝕚𝕘𝕙𝕥 ☽⋆✨", "GOoDnIgHt😗💛", "G⭐⭐D...NI:GHT", "♡✨ǤØØĐ ŇƗǤĦŦ✨♡", "♡ĞØØĐ ŇĪĞHȚ♡", "||____G⭕⭕d Night____||", "♡▪G•O•O•D~N•I•G•H•T▪♡", "●⃝ᶫᵒꪜe☯ᴳᶹʳᶹ᭄●⁴³", "❤️* *ǤØØĐ ŇƗǤĦŦ* *",  "•°•°•°GOOD NIGHT°•°•°•", "❤️good night✨⚡", "ᴳᴼᴼᴰ|ɴɪɢʜᴛ⋆", "Night ❤️💕🥰", "🍃ᴳᴼᴼᴰ🍁ɴɪɢʜᴛ", "Good Night 😴😴", "°~||...♪♪G∅∅D Π¡gH†♪♪...||~°", "Good night 😴🥱", "👻 Good Night 👻"];
             const gm_text = ["❀🍃Good❀ ❀morning❀🥰❀","☘️𝐺𝑜𝑜𝑑 🌅𝑚𝑜𝑟𝑛𝑖𝑛𝑔 💐","🍃𝙶𝚘𝚘𝚍 🌻𝚖𝚘𝚛𝚗𝚒𝚗𝚐 🥰","🍀𝗚𝗼𝗼𝗱 😘𝗺𝗼𝗿𝗻𝗶𝗻𝗴 🌸","🌻𝓖𝓸𝓸𝓭 𝓶𝓸𝓻𝓷𝓲𝓷𝓰 💞","🌼🅖🅞🅞🅓 🅜🅞🅡🅝🅘🅝🅖 🐶","🍃Ⓖⓞⓞⓓ 🌈ⓜⓞⓡⓝⓘⓝⓖ 🥰",   "♥ 🌅 𝐆𝔬𝓸𝕕 𝐦σＲŇ𝓘η𝑔 🌤️ 🐣ൠ",   "💖´ •.¸♥¸.•* G͛⦚o͛⦚o͛⦚d͛⦚ M͛⦚o͛⦚r͛⦚n͛⦚i͛⦚n͛⦚g͛⦚ *•.¸♥¸.•´💖", "˜”°•.˜”°• Good Morning •°”˜.•°”˜",  "(༒G●●d M●RNINg༒)", "꧁༺ɢօօɖ ʍօʀռɨռɢ༻꧂", "꧁ɢȏȏԀ༒ṃȏяṅıṅɢ࿐", "꧁༒☬Good Morning ☬༒꧂", "⚡GØoͥdmͣoͫrήiήg⚡", "★🅶🅾🅾🅳 🅼🅾🆁🅽🅸🅽🅶★", "🄶🄾🄾🄳∞︎︎♡🄼🄾🅁🄽🄸🄽🄶",  "⚡꧁ɢȏȏԀ༒ṃȏяṅıṅɢ࿐,⚡","❣️ Ｇｏｏｄ Ｍｏｒｎｉｎｇ ❣️", "🌹 ɢᴏᴏᴅ ᴍᴏʀɴɪɴɢ 🌹", "🌅 𝔾𝕠𝕠𝕕 𝕄𝕠𝕣𝕟𝕚𝕟𝕘 🌤️", "🌄 𝒢𝑜𝑜𝒹 𝑀𝑜𝓇𝓃𝒾𝓃𝑔 🌟", "🌅 ₲ØØĐ ₥ØⱤ₦ł₦₲ 🌻", "💕 GӨӨD MӨЯПIПG 💕", "🌅 𝙶𝚘𝚘𝚍 𝙼𝚘𝚛𝚗𝚒𝚗𝚐 🌤️", "🌅 𝓖𝓸𝓸𝓭 𝓜𝓸𝓻𝓷𝓲𝓷𝓰 🌤️",  "🥰 gσσ∂ мσяηιηg 🌅", "💐 GððÐ Mðrñïñg 💐", "🌹 Good Morning 🌹", "🌹 Gₒₒd ₘₒᵣₙᵢₙg 🌹", "🌅 ᴳᵒᵒᵈ ᴹᵒʳⁿⁱⁿᵍ 🌤️", "🌅 𝔊𝔬𝔬𝔡 𝔐𝔬𝔯𝔫𝔦𝔫𝔤 🌤️", "🌺 𝕲𝖔𝖔𝖉 𝕸𝖔𝖗𝖓𝖎𝖓𝖌 🌺",  "🌅️ ɓuıuɹoW poo⅁⛅"];
 	        const gf_text = ["ɢᴏᴏᴅ ᴀғᴛᴇʀɴᴏᴏɴ 🌞","𝓖𝓸𝓸𝓭 𝓐𝓯𝓽𝓮𝓻𝓷𝓸𝓸𝓷", "𝔾𝕠𝕠𝕕 𝔸𝕗𝕥𝕖𝕣𝕟𝕠𝕠𝕟", "𝒢ℴℴ𝒹 𝒜𝒻𝓉ℯ𝓇𝓃ℴℴ𝓃", "𝓖𝓸𝓸𝓭 𝓐𝓯𝓽𝓮𝓻𝓷𝓸𝓸𝓷"];
 	        const ge_text = ["ɢᴏᴏᴅ ᴇᴠᴇɴɪɴɢ 🌥","𝓖𝓸𝓸𝓭 𝓮𝓿𝓮𝓷𝓲𝓷𝓰", "𝔾𝕠𝕠𝕕 𝕖𝕧𝕖𝕟𝕚𝕟𝕘", "𝕲𝖔𝖔𝖉 𝖊𝖛𝖊𝖓𝖎𝖓𝖌", "𝒢ℴℴ𝒹 ℯ𝓋ℯ𝓃𝒾𝓃ℊ", "𝓖𝓸𝓸𝓭 𝓮𝓿𝓮𝓷𝓲𝓷𝓰"];
             var gn_len = gn_text.length;
-            var gm_len = gm_text.length;
+            var gm_len = gm_text.length; 
 		    var gf_len = gf_text.length;
             var ge_len = ge_text.length;
 	        var gn = Math.floor(gn_len*Math.random());
 	        var gm = Math.floor(gm_len*Math.random());
 		    var gf = Math.floor(gf_len*Math.random());
 	        var ge = Math.floor(ge_len*Math.random());
-            var wish = hrs < 12 ? gm_text[gm] : hrs <= 17 ? gf_text[gf] : hrs <= 19 ? ge_text[ge] : hrs <= 24 ? gn_text[gn] : gm_text[gm]
-		   
+            var wish_data = hrs < 12 ? gm_text[gm] : hrs <= 17 ? gf_text[gf] : hrs <= 19 ? ge_text[ge] : hrs <= 24 ? gn_text[gn] : gm_text[gm];
+            var wish = '*'+wish_data+'*';
+            function sleep(m) {return new Promise(r => setTimeout(r, m*60000));};
 
-            function sleep(m) {
-                return new Promise(r => setTimeout(r, m*60000));
-            }
-
-
-
-
-
-
-
-
-
-
-
-
+            if (from.endsWith('@g.us')) return
             switch (message) {
                 case 'hi':
                 case 'hlo':
                 case 'hey':
                 case 'hello':
-                    Ammu.sendMessage(from, { text: 'Hey @'+sender.split('@')[0]+' Type menu to get info', mentions: [sender] });                     
+                case 'menu':
+                    var sections = [
+                        {
+                            title: "📂HOME",
+                            rows: [
+                                {title: "❏ HOME", rowId: "home", description: "HOME"},
+                                {title: "❏ ABOUT US", rowId: "about_us", description: "ABOUT US"},
+                                {title: "❏ DEPARTMENTS", "rowId": "departments", description: "DEPARTMENTS"},
+                                {title: "❏ PLACEMENT", "rowId": "placement", description: "PLACEMENT"},
+                                {title: "❏ ACTIVITIES","rowId": "activities", description: "ACTIVITIES"},
+                                {title: "❏ ADMISSION","rowId": "activities", description: "ACTIVITIES"},
+                                {title: "❏ EOA","rowId": "eoa", description: "EOA"},
+                                {title: "❏ MORE","rowId": "more", description: "MORE"},
+                                {title: "❏ CONTACT US","rowId": "contact_us", description: "CONTACT US"}
+                            ]
+    
+                        },
+                    ]
+                    var listMessage = {
+                       text: '*Welcome to GPTC perumbavoor Whatsapp*\n\nPhone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala\n\n'+ihr+':'+min+':'+sec+' '+ampm+'\n'+day+'/'+mon+'/'+year,
+                       footer: desmsg,
+                       title: '*Hey @'+pushname+'*\n'+wish,
+                       buttonText: '📁HOME',
+                       sections
+                    }
+                    var sendMsg =  await Ammu.sendMessage(from, listMessage);
+                    await sleep(15)
+                    await Ammu.sendMessage(from, { delete: sendMsg.key });                     
                 break
+                case 'home':
+                    var button = [{buttonId: 'menu', buttonText: {displayText: '🔙'}, type: 1}]
+                    var buttonMessage = {
+                        image: {url: 'images/College2.jpg'},
+                        caption: "\n*❏ Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n\n*❏ Mission*\n⭐ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⭐ To apply technology in the traditional skills, thereby enhancing the living standard of the community.\n\n*❏ Accreditation Status*\nSelf-Assessment Report (SAR) is filed for NBA accreditation of Electronics and Communication Engineering, and Computer Engineering Programs. The accreditation visit is expected shortly.\n\n*❏ Quality Policy*\nIt is our commitment to impart quality skill education to our students. We understand that along with cognitive learning, the focus shall also be given to the sensory or psychomotor domain. We expect that our strategies shall help students behave or respond positively to the ever-progressing technological development and shall reap direct benefit from the scenario leading to sustainability. Sustainable development also promotes entrepreneurial thinking among the students.",
+                        footerText: desmsg,
+                        buttons: button,
+                        headerType: 4
+                    }
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    await sleep(15)
+                    await Ammu.sendMessage(from, { delete: sendMsg.key });
+                break
+                case 'about_us':
+                    await Ammu.sendMessage(from, { delete: msg.key }); 
+                    var button = [{buttonId: 'menu', buttonText: {displayText: '🔙'}, type: 1}]
+                    var buttonMessage = {
+                        image: {url: 'images/College1.jpg'},
+                        caption: "\n*═══════════ABOUT US═══════════*\n*Government Polytechnic College, Perumbavoor* had clear visibility in the state of Kerala as one of the best technical institutions providing quality skill education. With Skill – Excellence – Sustainability as our motto, we provide quality skill education to our students for their sustainable development. By nurturing the fundamental traits to excel in life through specialized training, the college is proposed as a center of excellence providing quality technical education to our students.Established in 1959 as a Junior Technical School, is upgraded to Polytechnic College in the year 1994. The college is managed by the Department of Technical Education under Higher Education, Government of Kerala. With an intake of 60 students to each Diploma program of\n⭐ Mechanical Engineering \n⭐ Computer Engineering\n⭐ Electronics and Communication Engineering and,\nall the programs are approved by the All India Council for Technical Education (AICTE), New Delhi, and are affiliated with the Kerala State Board of Technical Education. Department of Electronics and Communication Engineering and the Department of Computer Engineering had already filed Self-Assessment Report (SAR) for NBA accreditation, the expert visit is in due.\n           The college is situated in a sprawling campus of 6.93 acres, nestled among the lush greenery of Koovapady Panchayath in the middle of Ernakulum District, providing a pleasant atmosphere for the students for their emotional development.",
+                        footerText: desmsg,
+                        buttons: button,
+                        headerType: 4
+                    }
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    await sleep(15)
+                    await Ammu.sendMessage(from, { delete: sendMsg.key });
+                break
+                case '🔙':
+                    var reactionMessage = {
+                        react: {
+                            text: "💖",
+                            key: msg.key
+                        }
+                    }
+                    Ammu.sendMessage(from, reactionMessage);
+                break
+
+
+
+
+
+
+
+
                 case 'log':
                     if (!SUDO) return
                     console.log(pushname,msg.pushName,msg.key.remoteJid);
@@ -161,7 +222,7 @@ async function BlackSudo () {
                 case 'departments':
                 case 'course':
                 case 'courses':
-		        case 'menu':
+		        
                     var sections = [
                         {
                             title: "Departments",
@@ -194,6 +255,7 @@ async function BlackSudo () {
                  
                     Ammu.sendMessage(from, listMessage);
                 break
+                
                 case '.genaraladmin':
                 case 'office':
                 case 'staff':
@@ -290,7 +352,7 @@ async function BlackSudo () {
                           {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
                     ]
                     var gendepbuttonMessage = {
-                            text: "\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n\n*❏ Institution Mission*\n⚫ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⚫ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
+                            text: "\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n\n*❏ Institution Mission*\n⭐ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⭐ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
                             footer: desmsg,
                             buttons: gendepbutton,
                             headerType: 1
@@ -304,7 +366,7 @@ async function BlackSudo () {
                     ]
                     var comenbuttonMessage = {
                         image: {url: 'images/CT.jpg'},
-                        caption: "\n*COMPUTER ENGINEERING*\nThe Computer Engineering Department was established in the year 1995. The department offers a three-year Diploma in Computer Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n*❏ Infrastructural Facilities*\nThe department is housed in Computer Engineering block with\n⚫ Well-appointed three numbers of classrooms.\n⚫ Five numbers of well-equipped laboratories\n\n*❏ Vision of the Department*\nExcel as a center of skill education in Computer Engineering moulding professionals who sincerely strive for the betterment of themselves and society.\n*❏ Mission of the Department*\n⚫ To impart state of the art, knowledge, skill and attitude to the graduates ensuring sustainable development.\n⚫ To develop adaptiveness for being competent to acquaint with the technological changes.",
+                        caption: "\n*COMPUTER ENGINEERING*\nThe Computer Engineering Department was established in the year 1995. The department offers a three-year Diploma in Computer Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n*❏ Infrastructural Facilities*\nThe department is housed in Computer Engineering block with\n⭐ Well-appointed three numbers of classrooms.\n⭐ Five numbers of well-equipped laboratories\n\n*❏ Vision of the Department*\nExcel as a center of skill education in Computer Engineering moulding professionals who sincerely strive for the betterment of themselves and society.\n*❏ Mission of the Department*\n⭐ To impart state of the art, knowledge, skill and attitude to the graduates ensuring sustainable development.\n⭐ To develop adaptiveness for being competent to acquaint with the technological changes.",
                         footerText: desmsg,
                         buttons: comenbutton,
                         headerType: 4
@@ -318,7 +380,7 @@ async function BlackSudo () {
                     ]
                     var ecenbuttonMessage = {
                         image: {url: 'images/EC.jpg'},
-                        caption: "\n*Electronics & Communication Engineering*\nThe Electronics and Communication Engineering Department was established in the year 1995. The department offers a three-year Diploma in Electronics and Communication Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n\n*❏ Infrastructural Facilities*\nThe department is housed in Academic Block - 1 with\n⚫ Well-appointed three numbers of classrooms.\n⚫ Mini seminar hall with online conferencing facility\n⚫ Six numbers well-equipped laboratories\n\n*❏ Services Offered*\n\nProduction and Training Center (PAT)\nPAT is a project of the Department of Technical Education. PAT currently manufactures AVR trainer kits and 8051 trainer kits. These kits are currently being used by the majority of Polytechnic Colleges in the state.\n\n*❏ Self-Maintenance Cell (SMC)*\nSelf-maintenance Cell offers technical support by way of maintenance and repair of electronic equipment and computers of various departments. These services are now offered to other government and private organizations as outreach programs. varruction of a new academic block for the department for an estimated cost of Rs. 12 crores is in progress",
+                        caption: "\n*Electronics & Communication Engineering*\nThe Electronics and Communication Engineering Department was established in the year 1995. The department offers a three-year Diploma in Electronics and Communication Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n\n*❏ Infrastructural Facilities*\nThe department is housed in Academic Block - 1 with\n⭐ Well-appointed three numbers of classrooms.\n⭐ Mini seminar hall with online conferencing facility\n⭐ Six numbers well-equipped laboratories\n\n*❏ Services Offered*\n\nProduction and Training Center (PAT)\nPAT is a project of the Department of Technical Education. PAT currently manufactures AVR trainer kits and 8051 trainer kits. These kits are currently being used by the majority of Polytechnic Colleges in the state.\n\n*❏ Self-Maintenance Cell (SMC)*\nSelf-maintenance Cell offers technical support by way of maintenance and repair of electronic equipment and computers of various departments. These services are now offered to other government and private organizations as outreach programs. varruction of a new academic block for the department for an estimated cost of Rs. 12 crores is in progress",
                         footerText: desmsg,
                         buttons: ecenbutton,
                         headerType: 4
@@ -331,7 +393,7 @@ async function BlackSudo () {
                         {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
                     ]
                     var meenbuttonMessage = {
-                        text: "\n*MECHANICAL ENGINEERING*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⚫ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⚫ To apply technology in the traditional skills, thereby enhancing the living standard of the community.\n*❏ Mechanical Engineering Vision*\nExcel as a centre of skill education in mechanical engineering moulding professionals who strive for the betterment of society\n*❏ Mechanical Engineering Mission*\n⚫ Provide state of art knowledge, skill and transform the students into responsible professionals for the sustainable development of society.\n⚫ Provide good infrastructure facilities so that students will gain hands on experience by using various equipment and software.\n⚫ Inculcate the habit of self-learning to enhance the employability.",
+                        text: "\n*MECHANICAL ENGINEERING*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⭐ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⭐ To apply technology in the traditional skills, thereby enhancing the living standard of the community.\n*❏ Mechanical Engineering Vision*\nExcel as a centre of skill education in mechanical engineering moulding professionals who strive for the betterment of society\n*❏ Mechanical Engineering Mission*\n⭐ Provide state of art knowledge, skill and transform the students into responsible professionals for the sustainable development of society.\n⭐ Provide good infrastructure facilities so that students will gain hands on experience by using various equipment and software.\n⭐ Inculcate the habit of self-learning to enhance the employability.",
                         footer: desmsg,
                         buttons: meenbutton,
                         headerType: 1
@@ -344,7 +406,7 @@ async function BlackSudo () {
                         {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
                     ]
                     var genwkshbuttonMessage = {
-                        text: "\n*WORKSHOP*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⚫ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⚫ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
+                        text: "\n*WORKSHOP*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⭐ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⭐ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
                         footer: desmsg,
                         buttons: genwkshbutton,
                         headerType: 1
@@ -365,7 +427,7 @@ async function BlackSudo () {
                     Ammu.sendMessage(from, weblink_templateMessage,{quoted: msg });
                 break    
 
-                default:
+                default: 
             }
 
         } catch (e) {
