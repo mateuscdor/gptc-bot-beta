@@ -133,7 +133,7 @@ async function BlackSudo () {
                     var listMessage = {
                        text: '*Welcome to GPTC perumbavoor Whatsapp*\n\nPhone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala\n\n'+ihr+':'+min+':'+sec+' '+ampm+'\n'+day+'/'+mon+'/'+year,
                        footer: desmsg,
-                       title: '*Hey @'+pushname+'*\n'+wish+hrs,
+                       title: '*Hey @'+pushname+'*\n'+wish,
                        buttonText: '📁HOME',
                        sections
                     }
