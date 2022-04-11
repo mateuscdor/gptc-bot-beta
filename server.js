@@ -8,8 +8,6 @@ const moment = require("moment-timezone");
 const { state, saveState } = useSingleFileAuthState('./sesson.json');
 const desmsg = '*꧁༺𝗚𝗣𝗧𝗖𖣘𝗣𝗘𝗥𝗨𝗠𝗕𝗔𝗩𝗢𝗢𝗥༻꧂*'
 
-
-
 async function BlackSudo () {
 
     const { version, isLatest } = await fetchLatestBaileysVersion();
