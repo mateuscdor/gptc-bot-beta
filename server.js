@@ -110,11 +110,11 @@ async function BlackSudo () {
             async function delete_old(sendMsg) {
                 try
                     {
-                        var delete_umsg = JSON.parse(fs.readFileSync('./json/delete/'+from.split('@')[0]+'.json'));
+                        var delete_umsg = JSON.parse(fs.readFileSync('json/delete/'+from.split('@')[0]+'.json'));
                         await Ammu.sendMessage(from, { delete: delete_umsg });
-                        fs.writeFileSync('./json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
+                        fs.writeFileSync('json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
                     } catch {
-                        fs.writeFileSync('./json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
+                        fs.writeFileSync('json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
                         console.log('[ERROR] => Message delete Akkanilla!');
                     }
             }
