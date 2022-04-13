@@ -19,7 +19,7 @@ async function BlackSudo () {
 		auth: state,
 		logger: Pino({ level: "silent" }),
 		version: version,
-        	browser: ['BlackSudo', 'safari','3.0'],
+        	browser: ['BlackSud', 'Safari','3.0'],
 	});
     Ammu.ev.on("creds.update", saveState);
     Ammu.ev.on("connection.update", async (up) => {
@@ -28,6 +28,7 @@ async function BlackSudo () {
 			console.log("Connection Status: ",connection);
             console.log('Server started');
 		};
+        if (connection === 'open') return Ammu.sendMessage('919188346721@s.whatsapp.net',{ text: 'IAM ONLINE '});
 		if (connection === "close") {
 			let reason = new Boom(lastDisconnect.error).output.statusCode;
 			if (reason === DisconnectReason.badSession) {
@@ -53,6 +54,7 @@ async function BlackSudo () {
 		};
     });
 
+    //Ammu.ev.on("connection.update", async (up) => { });
     Ammu.ev.on("messages.upsert", async (mp) => {
         try {
             if(!mp.messages) return
@@ -68,7 +70,7 @@ async function BlackSudo () {
             const cmd = (type === 'conversation' && msg.message.conversation) ? msg.message.conversation : (type == 'imageMessage') && msg.message.imageMessage.caption ? msg.message.imageMessage.caption : (type == 'documentMessage') && msg.message.documentMessage.caption ? msg.message.documentMessage.caption : (type == 'videoMessage') && msg.message.videoMessage.caption ? msg.message.videoMessage.caption : (type == 'extendedTextMessage') && msg.message.extendedTextMessage.text ? msg.message.extendedTextMessage.text : (type == 'buttonsResponseMessage' && msg.message.buttonsResponseMessage.selectedButtonId) ? msg.message.buttonsResponseMessage.selectedButtonId : (type == 'templateButtonReplyMessage') && msg.message.templateButtonReplyMessage.selectedId ? msg.message.templateButtonReplyMessage.selectedId : (type === 'listResponseMessage' && msg.message.listResponseMessage.title) ? msg.message.listResponseMessage.title : "";
             const body = (type === 'conversation') ? msg.message.conversation : (type == 'imageMessage') ? msg.message.imageMessage.caption : (type == 'videoMessage') ? msg.message.videoMessage.caption : (type == 'extendedTextMessage') ? msg.message.extendedTextMessage.text : (type == 'buttonsResponseMessage') ? msg.message.buttonsResponseMessage.selectedButtonId : (type == 'listResponseMessage') ? msg.message.listResponseMessage.singleSelectReply.selectedRowId : (type == 'templateButtonReplyMessage') ? msg.message.templateButtonReplyMessage.selectedId : (type === 'messageContextInfo') ? (msg.message.buttonsResponseMessage?.selectedButtonId || msg.message.listResponseMessage?.singleSelectReply.selectedRowId || (type == 'listResponseMessage' ? msg.msg.singleSelectReply.selectedRowId : '') || msg.msg.text || msg.msg.caption || msg.msg || '') : '';
             const budy = (type === 'conversation') ? msg.message.conversation : (type === 'extendedTextMessage') ? msg.message.extendedTextMessage.text : '';
-            const message = body.trim().split(/ +/).shift().toLowerCase();
+            const command = body.trim().split(/ +/).shift().toLowerCase();
             const args = body.trim().split(/ +/).slice(1);
             const botNumber = Ammu.user.id.split(':')[0] + '@s.whatsapp.net';
             const isGroup = from.endsWith('@g.us');
@@ -105,14 +107,30 @@ async function BlackSudo () {
             var wish_data = hrs < 12 ? gm_text[gm] : hrs <= 17 ? gf_text[gf] : hrs <= 19 ? ge_text[ge] : hrs <= 24 ? gn_text[gn] : gm_text[gm];
             var wish = '*'+wish_data+'*';
             function sleep(m) {return new Promise(r => setTimeout(r, m*60000));};
+            async function delete_old(sendMsg) {
+                try
+                    {
+                        var delete_umsg = JSON.parse(fs.readFileSync('./json/delete/'+from.split('@')[0]+'.json'));
+                        await Ammu.sendMessage(from, { delete: delete_umsg });
+                        fs.writeFileSync('./json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
+                    } catch {
+                        fs.writeFileSync('./json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
+                        console.log('[ERROR] => Message delete Akkanilla!');
+                    }
+            }
 
-            if (from.endsWith('@g.us')) return
-            switch (message) {
+            if (isGroup) return
+            switch (command) {
                 case 'hi':
                 case 'hlo':
                 case 'hey':
                 case 'hello':
                 case 'menu':
+                case 'hy':
+                case 'hay':
+                case 'hai':
+                    //console.log(msg.message.extendedTextMessage.contextInfo.stanzaId)
+                    //console.log(msg.message)
                     var sections = [
                         {
                             title: "📂HOME",
@@ -131,15 +149,14 @@ async function BlackSudo () {
                         },
                     ]
                     var listMessage = {
-                       text: '*Welcome to GPTC perumbavoor Whatsapp*\n\nPhone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala\n\n'+ihr+':'+min+':'+sec+' '+ampm+'\n'+day+'/'+mon+'/'+year,
+                       text: '*Welcome to GPTC perumbavoor Whatsapp*\n\nPhone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala\n\n'+'🕰️ : '+ihr+':'+min+':'+sec+' '+ampm+'\n 📅 : '+day+'/'+mon+'/'+year,
                        footer: desmsg,
                        title: '*Hey @'+pushname+'*\n'+wish,
                        buttonText: '📁HOME',
                        sections
                     }
                     var sendMsg =  await Ammu.sendMessage(from, listMessage);
-                    await sleep(15)
-                    await Ammu.sendMessage(from, { delete: sendMsg.key });                     
+                    delete_old(sendMsg)                  
                 break
                 case 'home':
                     var button = [{buttonId: 'menu', buttonText: {displayText: '🔙'}, type: 1}]
@@ -151,11 +168,11 @@ async function BlackSudo () {
                         headerType: 4
                     }
                     var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
-                    await sleep(15)
-                    await Ammu.sendMessage(from, { delete: sendMsg.key });
+                    delete_old(sendMsg)  
                 break
                 case 'about_us':
-                    await Ammu.sendMessage(from, { delete: msg.key }); 
+                    await Ammu.sendMessage(from, { delete: msg.key });
+                    
                     var button = [{buttonId: 'menu', buttonText: {displayText: '🔙'}, type: 1}]
                     var buttonMessage = {
                         image: {url: 'images/College1.jpg'},
@@ -165,10 +182,11 @@ async function BlackSudo () {
                         headerType: 4
                     }
                     var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
-                    await sleep(15)
-                    await Ammu.sendMessage(from, { delete: sendMsg.key });
+                    delete_old(sendMsg)
                 break
                 case '🔙':
+                case 'thank':
+                case 'thanks':
                     var reactionMessage = {
                         react: {
                             text: "💖",
@@ -176,6 +194,179 @@ async function BlackSudo () {
                         }
                     }
                     Ammu.sendMessage(from, reactionMessage);
+                break
+                case '.genaraladmin':
+                case 'office':
+                case 'staff':
+                case 'staffs':
+                    var  sections = [
+                        {
+                            title: "STAFFS",
+                            rows: [
+                                {title: "Dr. AIJU THOMAS", rowId: "principal", description: "Principal"},
+                                {title: "BABU PRADEEP", rowId: "seniorsuperintendent",  description: "Senior Superintendent"},
+                                {title: "LISSY K K", rowId: "headaccountant",  description: "Head Accountant"},
+                                {title: "Jini A R", "rowId": "seniorclerk",   description: "Senior clerk"},
+                            ] 
+                        },
+                    ]
+                    var listMessage = {
+                        text: 'The college is established by Higher Education Department of Government of Kerala under Department of Technical Education. Hierarchy of Governance is as shown below.\n\nPhone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala',
+                        footer: desmsg,
+                        title: "*OFFICE*",
+                        buttonText: "📁STAFF",
+                        sections
+                    }
+                    var sendMsg =  await Ammu.sendMessage(from, listMessage);
+                    delete_old(sendMsg);
+                break
+                case 'principal':
+                    var templateButtons = [ 
+                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919447388010'}},
+                        {index: 2, urlButton:  {displayText: 'Email-id', url: 'mailto:aiju.thomas@gmail.com'}},
+                        {index: 2, quickReplyButton: {displayText: '🔙', id:'office'}},
+                    ] 
+                    var buttonMessage = {
+                        image: {url: 'images/53.jpg'},
+                        caption: "         *Dr. AIJU THOMAS*\n❏ Designation : Principal\n",
+                        footerText: desmsg,
+                        templateButtons: templateButtons,
+                        headerType: 4
+                    }
+
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    delete_old(sendMsg); 
+                break
+                case 'seniorsuperintendent':
+                    var templateButtons = [ 
+                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919446684378'}},
+                        {index: 2, quickReplyButton: {displayText: '🔙', id:'office'}},
+                    ] 
+                    var buttonMessage = {
+                        image: {url: 'images/55.jpg'},
+                        caption: "         *BABU PRADEEP*\n❏ Designation : Senior Superintendent\n",
+                        footerText: desmsg,
+                        templateButtons: templateButtons,
+                        headerType: 4
+                    }
+
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    delete_old(sendMsg); 
+                break
+                case 'headaccountant':
+                    var templateButtons = [ 
+                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919495424817'}},
+                        {index: 2, quickReplyButton: {displayText: '🔙', id:'office'}},
+                    ] 
+                    var buttonMessage = {
+                        image: {url: 'images/56.jpg'},
+                        caption: "         *LISSY K K*\n❏ Designation : Head Accountant\n",
+                        footerText: desmsg,
+                        templateButtons: templateButtons,
+                        headerType: 4
+                    }
+
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    delete_old(sendMsg); 
+                break
+                case 'seniorclerk':
+                    var templateButtons = [ 
+                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919562857224'}},
+                        {index: 2, urlButton:  {displayText: 'Email-id', url: 'mailto:arjiniprasad@gmail.com'}},
+                        {index: 2, quickReplyButton: {displayText: '🔙', id:'office'}},
+                    ] 
+                    var buttonMessage = {
+                        image: {url: 'images/14.jpg'},
+                        caption: "         *Jini A R*\n❏ Designation : Senior clerk\n❏ Qualifications  :  Diploma in Electronics Production Technology\n",
+                        footerText: desmsg,
+                        templateButtons: templateButtons,
+                        headerType: 4
+                    }
+
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    delete_old(sendMsg);
+                break
+                case 'departments':
+                    var sections = [
+                        {
+                            title: "Departments",
+                            rows: [
+                                {title: "General Department", rowId: ".gendep", description: "For About General Department"},
+                                {title: "Computer Engineering", rowId: ".comen", description: "For About Computer Engineering"},
+                                {title: "Electronics & Communication Engineering", "rowId": ".ecen", description: "For About Electronics & Communication Engineering"},
+                                {title: "Mechanical Engineering", "rowId": ".meen", description: "For About Mechanical Engineering"},
+                                {title: "General Workshop","rowId": ".genwksh", description: "For About General Workshop"}
+                            ]
+    
+                        },
+                    ]
+                    var listMessage = {
+                       text: 'Phone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala',
+                       footer: desmsg,
+                       title: "GOVERNMENT POLYTECHNIC COLLEGE PERUMBAVOOR",
+                       buttonText: "📁Departments",
+                       sections
+                    }
+                 
+                    var sendMsg =  await Ammu.sendMessage(from, listMessage);
+                    delete_old(sendMsg);
+                break
+                case '.gendep':
+                    var button = [{buttonId: 'departments', buttonText: {displayText: '🔙'}, type: 1}]
+                    var buttonMessage = {
+                            text: "\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n\n*❏ Institution Mission*\n⭐ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⭐ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
+                            footer: desmsg,
+                            buttons: button,
+                            headerType: 1
+                    }
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    delete_old(sendMsg);
+                break
+                case '.comen':
+                    var button = [{buttonId: 'departments', buttonText: {displayText: '🔙'}, type: 1}]
+                    var buttonMessage = {
+                        image: {url: 'images/CT.jpg'},
+                        caption: "\n*COMPUTER ENGINEERING*\nThe Computer Engineering Department was established in the year 1995. The department offers a three-year Diploma in Computer Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n*❏ Infrastructural Facilities*\nThe department is housed in Computer Engineering block with\n⭐ Well-appointed three numbers of classrooms.\n⭐ Five numbers of well-equipped laboratories\n\n*❏ Vision of the Department*\nExcel as a center of skill education in Computer Engineering moulding professionals who sincerely strive for the betterment of themselves and society.\n*❏ Mission of the Department*\n⭐ To impart state of the art, knowledge, skill and attitude to the graduates ensuring sustainable development.\n⭐ To develop adaptiveness for being competent to acquaint with the technological changes.",
+                        footerText: desmsg,
+                        buttons: button,
+                        headerType: 4
+                    }
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    delete_old(sendMsg);
+                break
+                case '.ecen':
+                    var button = [{buttonId: 'departments', buttonText: {displayText: '🔙'}, type: 1}]
+                    var buttonMessage = {
+                        image: {url: 'images/EC.jpg'},
+                        caption: "\n*Electronics & Communication Engineering*\nThe Electronics and Communication Engineering Department was established in the year 1995. The department offers a three-year Diploma in Electronics and Communication Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n\n*❏ Infrastructural Facilities*\nThe department is housed in Academic Block - 1 with\n⭐ Well-appointed three numbers of classrooms.\n⭐ Mini seminar hall with online conferencing facility\n⭐ Six numbers well-equipped laboratories\n\n*❏ Services Offered*\n\nProduction and Training Center (PAT)\nPAT is a project of the Department of Technical Education. PAT currently manufactures AVR trainer kits and 8051 trainer kits. These kits are currently being used by the majority of Polytechnic Colleges in the state.\n\n*❏ Self-Maintenance Cell (SMC)*\nSelf-maintenance Cell offers technical support by way of maintenance and repair of electronic equipment and computers of various departments. These services are now offered to other government and private organizations as outreach programs. varruction of a new academic block for the department for an estimated cost of Rs. 12 crores is in progress",
+                        footerText: desmsg,
+                        buttons: button,
+                        headerType: 4
+                    }
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    delete_old(sendMsg);
+                break
+                case '.meen':
+                    var button = [{buttonId: 'departments', buttonText: {displayText: '🔙'}, type: 1}]
+                    var buttonMessage = {
+                        text: "\n*MECHANICAL ENGINEERING*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⭐ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⭐ To apply technology in the traditional skills, thereby enhancing the living standard of the community.\n*❏ Mechanical Engineering Vision*\nExcel as a centre of skill education in mechanical engineering moulding professionals who strive for the betterment of society\n*❏ Mechanical Engineering Mission*\n⭐ Provide state of art knowledge, skill and transform the students into responsible professionals for the sustainable development of society.\n⭐ Provide good infrastructure facilities so that students will gain hands on experience by using various equipment and software.\n⭐ Inculcate the habit of self-learning to enhance the employability.",
+                        footer: desmsg,
+                        buttons: button,
+                        headerType: 1
+                    }
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    delete_old(sendMsg);
+                break
+                case '.genwksh':
+                    var button = [{buttonId: 'departments', buttonText: {displayText: '🔙'}, type: 1}]
+                    var buttonMessage = {
+                        text: "\n*WORKSHOP*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⭐ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⭐ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
+                        footer: desmsg,
+                        buttons: button,
+                        headerType: 1
+                    }
+                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
+                    delete_old(sendMsg);
                 break
 
 
@@ -186,9 +377,10 @@ async function BlackSudo () {
 
 
                 case 'log':
-                    if (!SUDO) return
-                    console.log(pushname,msg.pushName,msg.key.remoteJid);
-                    Ammu.sendMessage(from, { text: '@'+pushname});
+                    console.log(pushname,msg.pushName,msg.key.remoteJid,args);
+                    //delete_old(from);
+                    var loadi = await Ammu.sendMessage(from, { text: '@'+pushname, mention: [sender]});
+                    console.log(loadi.key)
                 break
                 case 'num':
                 case 'number':
@@ -257,163 +449,8 @@ async function BlackSudo () {
                     Ammu.sendMessage(from, listMessage);
                 break
                 
-                case '.genaraladmin':
-                case 'office':
-                case 'staff':
-                case 'staffs':
-                    var  sections = [
-                        {
-                            title: "STAFFS",
-                            rows: [
-                                {title: "Dr. AIJU THOMAS", rowId: "principal", description: "Principal"},
-                                {title: "BABU PRADEEP", rowId: "seniorsuperintendent",  description: "Senior Superintendent"},
-                                {title: "LISSY K K", rowId: "headaccountant",  description: "Head Accountant"},
-                                {title: "Jini A R", "rowId": "seniorclerk",   description: "Senior clerk"},
-                            ] 
-                        },
-                    ]
-                    var listMessage = {
-                        text: 'The college is established by Higher Education Department of Government of Kerala under Department of Technical Education. Hierarchy of Governance is as shown below.\n\nPhone: 04842649251\nGmail:  gptcpbvr@gmail.com\nWebpage: https://gptcperumbavoor.ac.in\n\n Koovappady P.O.,\n Ernakulam - 683544, Kerala',
-                        footer: desmsg,
-                        title: "*OFFICE*",
-                        buttonText: "STAFFS",
-                        sections
-                    }
-                    Ammu.sendMessage(from, listMessage);
-                break
-                case 'principal':
-                    var templateButtons = [ 
-                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919447388010'}},
-                        {index: 2, urlButton:  {displayText: 'Email-id', url: 'mailto:aiju.thomas@gmail.com'}},
-                    ] 
-                    var buttonMessage = {
-                        image: {url: 'images/53.jpg'},
-                        caption: "         *Dr. AIJU THOMAS*\n❏ Designation : Principal\n",
-                        footerText: desmsg,
-                        templateButtons: templateButtons,
-                        headerType: 4
-                    }
-
-                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
-                    await sleep(1)
-                    await Ammu.sendMessage(from, { delete: sendMsg.key }); 
-                break
-                case 'seniorsuperintendent':
-                    var templateButtons = [ 
-                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919446684378'}},
-                    ] 
-                    var buttonMessage = {
-                        image: {url: 'images/55.jpg'},
-                        caption: "         *BABU PRADEEP*\n❏ Designation : Senior Superintendent\n",
-                        footerText: desmsg,
-                        templateButtons: templateButtons,
-                        headerType: 4
-                    }
-
-                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
-                    await sleep(1)
-                    await Ammu.sendMessage(from, { delete: sendMsg.key }); 
-                break
-                case 'headaccountant':
-                    var templateButtons = [ 
-                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919495424817'}},
-                    ] 
-                    var buttonMessage = {
-                        image: {url: 'images/56.jpg'},
-                        caption: "         *LISSY K K*\n❏ Designation : Head Accountant\n",
-                        footerText: desmsg,
-                        templateButtons: templateButtons,
-                        headerType: 4
-                    }
-
-                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
-                    await sleep(1)
-                    await Ammu.sendMessage(from, { delete: sendMsg.key }); 
-                break
-                case 'seniorclerk':
-                    var templateButtons = [ 
-                        {index: 1, callButton: {displayText: 'Mobile Number', phoneNumber: '+919562857224'}},
-                        {index: 2, urlButton:  {displayText: 'Email-id', url: 'mailto:arjiniprasad@gmail.com'}},
-                    ] 
-                    var buttonMessage = {
-                        image: {url: 'images/14.jpg'},
-                        caption: "         *Jini A R*\n❏ Designation : Senior clerk\n❏ Qualifications  :  Diploma in Electronics Production Technology\n",
-                        footerText: desmsg,
-                        templateButtons: templateButtons,
-                        headerType: 4
-                    }
-
-                    var sendMsg =  await Ammu.sendMessage(from, buttonMessage);
-                    await sleep(1)
-                    await Ammu.sendMessage(from, { delete: sendMsg.key }); 
-                break
-                case '.gendep':
-                    var gendepbutton = [
-                          {buttonId: 'info', buttonText: {displayText: 'INFO'}, type: 1},
-                          {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
-                    ]
-                    var gendepbuttonMessage = {
-                            text: "\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n\n*❏ Institution Mission*\n⭐ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⭐ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
-                            footer: desmsg,
-                            buttons: gendepbutton,
-                            headerType: 1
-                    }
-                    Ammu.sendMessage(from, gendepbuttonMessage);
-                break
-                case '.comen':
-                    var comenbutton = [
-                        {buttonId: 'info', buttonText: {displayText: 'INFO'}, type: 1},
-                        {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
-                    ]
-                    var comenbuttonMessage = {
-                        image: {url: 'images/CT.jpg'},
-                        caption: "\n*COMPUTER ENGINEERING*\nThe Computer Engineering Department was established in the year 1995. The department offers a three-year Diploma in Computer Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n*❏ Infrastructural Facilities*\nThe department is housed in Computer Engineering block with\n⭐ Well-appointed three numbers of classrooms.\n⭐ Five numbers of well-equipped laboratories\n\n*❏ Vision of the Department*\nExcel as a center of skill education in Computer Engineering moulding professionals who sincerely strive for the betterment of themselves and society.\n*❏ Mission of the Department*\n⭐ To impart state of the art, knowledge, skill and attitude to the graduates ensuring sustainable development.\n⭐ To develop adaptiveness for being competent to acquaint with the technological changes.",
-                        footerText: desmsg,
-                        buttons: comenbutton,
-                        headerType: 4
-                    }
-                    Ammu.sendMessage(from, comenbuttonMessage);
-                break
-                case '.ecen':
-                    var ecenbutton = [
-                        {buttonId: 'info', buttonText: {displayText: 'INFO'}, type: 1},
-                        {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
-                    ]
-                    var ecenbuttonMessage = {
-                        image: {url: 'images/EC.jpg'},
-                        caption: "\n*Electronics & Communication Engineering*\nThe Electronics and Communication Engineering Department was established in the year 1995. The department offers a three-year Diploma in Electronics and Communication Engineering. The program is approved by AICTE with an annual intake of 60 students. There is an additional intake of 3 students in the Fee waiver (FW) scheme and 6 in Lateral Entry (LE).\n\n*❏ Infrastructural Facilities*\nThe department is housed in Academic Block - 1 with\n⭐ Well-appointed three numbers of classrooms.\n⭐ Mini seminar hall with online conferencing facility\n⭐ Six numbers well-equipped laboratories\n\n*❏ Services Offered*\n\nProduction and Training Center (PAT)\nPAT is a project of the Department of Technical Education. PAT currently manufactures AVR trainer kits and 8051 trainer kits. These kits are currently being used by the majority of Polytechnic Colleges in the state.\n\n*❏ Self-Maintenance Cell (SMC)*\nSelf-maintenance Cell offers technical support by way of maintenance and repair of electronic equipment and computers of various departments. These services are now offered to other government and private organizations as outreach programs. varruction of a new academic block for the department for an estimated cost of Rs. 12 crores is in progress",
-                        footerText: desmsg,
-                        buttons: ecenbutton,
-                        headerType: 4
-                    }
-                    Ammu.sendMessage(from, ecenbuttonMessage);
-                break
-                case '.meen':
-                    var meenbutton = [
-                        {buttonId: 'info', buttonText: {displayText: 'INFO'}, type: 1},
-                        {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
-                    ]
-                    var meenbuttonMessage = {
-                        text: "\n*MECHANICAL ENGINEERING*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⭐ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⭐ To apply technology in the traditional skills, thereby enhancing the living standard of the community.\n*❏ Mechanical Engineering Vision*\nExcel as a centre of skill education in mechanical engineering moulding professionals who strive for the betterment of society\n*❏ Mechanical Engineering Mission*\n⭐ Provide state of art knowledge, skill and transform the students into responsible professionals for the sustainable development of society.\n⭐ Provide good infrastructure facilities so that students will gain hands on experience by using various equipment and software.\n⭐ Inculcate the habit of self-learning to enhance the employability.",
-                        footer: desmsg,
-                        buttons: meenbutton,
-                        headerType: 1
-                    }
-                    Ammu.sendMessage(from, meenbuttonMessage);
-                break
-                case '.genwksh':
-                    var genwkshbutton = [
-                        {buttonId: 'info', buttonText: {displayText: 'INFO'}, type: 1},
-                        {buttonId: 'departments', buttonText: {displayText: 'Departments'}, type: 1},
-                    ]
-                    var genwkshbuttonMessage = {
-                        text: "\n*WORKSHOP*\n\n*❏ Institution Vision*\nExcel as a centre of skill education moulding professionals who sincerely strive for the betterment of society.\n*❏ Institution Mission*\n⭐ To impart state of the art knowledge and skill to the graduate and moulding them to be competent, committed and responsible for the well being of society.\n⭐ To apply technology in the traditional skills, thereby enhancing the living standard of the community.",
-                        footer: desmsg,
-                        buttons: genwkshbutton,
-                        headerType: 1
-                    }
-                  Ammu.sendMessage(from, genwkshbuttonMessage);
-                break
+                
+                
                 case 'weblink':
                     var weblink_templateButtons = [
                         {index: 1, urlButton: {displayText: 'WEBSITE', url: 'https://gptcperumbavoor.ac.in'}},
