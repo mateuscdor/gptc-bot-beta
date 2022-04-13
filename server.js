@@ -136,6 +136,7 @@ async function BlackSudo () {
                 case 'hai':
                     //console.log(msg.message.extendedTextMessage.contextInfo.stanzaId)
                     //console.log(msg.message)
+                    fs.writeFileSync('json/delete/'+from.split('@')[0]+'.json', JSON.stringify({"remoteJid":"919188346721@s.whatsapp.net","fromMe":true,"id":"BAE527A16A1EB385"}));
                     var sections = [
                         {
                             title: "📂HOME",
