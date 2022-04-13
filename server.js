@@ -110,12 +110,18 @@ async function BlackSudo () {
             async function delete_old(sendMsg) {
                 try
                     {
-                        var delete_umsg = JSON.parse(fs.readFileSync('json/delete/'+from.split('@')[0]+'.json'));
-                        await Ammu.sendMessage(from, { delete: delete_umsg });
-                        fs.writeFileSync('json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
-                    } catch {
-                        fs.writeFileSync('json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
-                        console.log('[ERROR] => Message delete Akkanilla!');
+                    const path = 'json/delete/'+from.split('@')[0]+'.json'
+                    if (fs.existsSync(path)) 
+                        {  
+                            const delete_umsg = JSON.parse(fs.readFileSync());
+                            await Ammu.sendMessage(from, { delete: delete_umsg });
+                            fs.writeFileSync(path, JSON.stringify(sendMsg.key));
+                        } else {
+                            fs.writeFileSync(path, JSON.stringify(sendMsg.key));
+                        }
+                    } catch(err) {
+                        fs.writeFileSync(path, JSON.stringify(sendMsg.key));
+                        console.log('[ERROR] => Message delete Akkanilla! => ',err);
                     }
             }
 
@@ -380,6 +386,7 @@ async function BlackSudo () {
                     console.log(pushname,msg.pushName,msg.key.remoteJid,args);
                     //delete_old(from);
                     var loadi = await Ammu.sendMessage(from, { text: '@'+pushname, mention: [sender]});
+                    
                     console.log(loadi.key)
                 break
                 case 'num':
