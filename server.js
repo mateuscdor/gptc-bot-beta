@@ -110,16 +110,18 @@ async function BlackSudo () {
             async function delete_old(sendMsg) {
                 try
                     {
-                    if (fs.existsSync('/workspace/json/delete/'+from.split('@')[0]+'.json')) 
+                    if (fs.existsSync('json/delete/'+from.split('@')[0]+'.json')) 
                         {  
-                            const delete_umsg = JSON.parse(fs.readFileSync('/workspace/json/delete/'+from.split('@')[0]+'.json'));
-                            await Ammu.sendMessage(from, { delete: delete_umsg });
-                            fs.writeFileSync('/workspace/json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
+                            fs.existsSync('json/delete/'+from.split('@')[0]+'.json') 
+                            const delete_umsg = JSON.parse(fs.readFileSync('json/delete/'+from.split('@')[0]+'.json'));
+                            await Ammu.sendMessage(from, { delete: delete_umsg }); //delete_msg.json{"remoteJid":"919188346721@s.whatsapp.net","fromMe":true,"id":"BAE524A0A2501657"}
+                            fs.writeFileSync('json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
                         } else {
-                            fs.writeFileSync('/workspace/json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
+                            fs.writeFileSync('json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
                         }
                     } catch(err) {
-                        fs.writeFileSync('/workspace/json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
+                        fs.existsSync('json/delete/'+from.split('@')[0]+'.json')
+                        fs.writeFileSync('json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
                         console.log('[ERROR] => Message delete Akkanilla! => ',err);
                     }
             }
@@ -134,9 +136,6 @@ async function BlackSudo () {
                 case 'hy':
                 case 'hay':
                 case 'hai':
-                    //console.log(msg.message.extendedTextMessage.contextInfo.stanzaId)
-                    //console.log(msg.message)
-                    fs.writeFileSync('/workspace/json/delete/'+from.split('@')[0]+'.json', JSON.stringify({"remoteJid":"919188346721@s.whatsapp.net","fromMe":true,"id":"BAE527A16A1EB385"}));
                     var sections = [
                         {
                             title: "📂HOME",
