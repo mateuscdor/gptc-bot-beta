@@ -1,11 +1,13 @@
 'use strict'
 const { fetchLatestBaileysVersion, default: WASocket, makeWASocket, makeInMemoryStore, BufferJSON, initInMemoryKeyStore, DisconnectReason, AnyMessageContent, delay, useSingleFileAuthState, generateForwardMessageContent, prepareWAMessageMedia, generateWAMessageFromContent, generateMessageID, proto, downloadContentFromMessage, MessageType, MessageOptions, Mimetype } = require("@adiwajshing/baileys")
 const { Boom } = require('@hapi/boom');
+const { Sequelize, DataTypes } = require('sequelize');
 const Pino = require('pino');
 const fs = require('fs');
 const axios = require("axios");
 const moment = require("moment-timezone");
-const { state, saveState } = useSingleFileAuthState('./sesson.json');
+const DataBase = new Sequelize({ dialect: "sqlite", storage: './DB/DB.db'});
+const { state, saveState } = useSingleFileAuthState('./session.json');
 const desmsg = '*꧁༺𝗚𝗣𝗧𝗖𖣘𝗣𝗘𝗥𝗨𝗠𝗕𝗔𝗩𝗢𝗢𝗥༻꧂*'
 
 
@@ -19,7 +21,7 @@ async function BlackSudo () {
 		auth: state,
 		logger: Pino({ level: "silent" }),
 		version: version,
-        	browser: ['BlackSud', 'Safari','3.0'],
+        	browser: ['BlackSudo', 'Safari','3.0'],
 	});
     Ammu.ev.on("creds.update", saveState);
     Ammu.ev.on("connection.update", async (up) => {
@@ -107,22 +109,87 @@ async function BlackSudo () {
             var wish_data = hrs < 12 ? gm_text[gm] : hrs <= 17 ? gf_text[gf] : hrs <= 19 ? ge_text[ge] : hrs <= 24 ? gn_text[gn] : gm_text[gm];
             var wish = '*'+wish_data+'*';
             function sleep(m) {return new Promise(r => setTimeout(r, m*60000));};
+            const MSGDB = DataBase.define('deletemsgs', {
+                msg_from: {
+                  type: DataTypes.STRING,
+                  allowNull: false
+                },
+                msg_info: {
+                    type: DataTypes.STRING,
+                    allowNull: false
+                },
+                msg_id: {
+                    type: DataTypes.STRING,
+                    allowNull: false
+                }
+            });
+            
+            async function getid(jid = null, typ = 'delete') {
+                var Msg = await MSGDB.findAll({
+                    where: {
+                        msg_from: jid,
+                        msg_info: typ
+                    }
+                });
+            
+                if (Msg.length < 1) {
+                    return false;
+                } else {
+                    return Msg[0].dataValues;
+                }
+            }
+            async function setid(jid = null, typ = 'delete', id = null) {
+                var Msg = await MSGDB.findAll({
+                    where: {
+                        msg_from: jid,
+                        msg_info: typ
+                    }
+                });
+            
+                if (Msg.length < 1) {
+                    return await MSGDB.create({ msg_from: jid, msg_info: typ, msg_id:id });
+                } else {
+                    return await Msg[0].update({ msg_from: jid, msg_info: typ, msg_id:id});
+                }
+            }
+            
+            async function deleteid(jid = null, typ = 'delete') {
+                var Msg = await MSGDB.findAll({
+                    where: {
+                        msg_from: jid,
+                        msg_info: typ
+                    }
+                });
+            
+                return await Msg[0].destroy();
+            }
+            await DataBase.sync();
+            var nodb;
             async function delete_old(sendMsg) {
                 try
                     {
-                    if (fs.existsSync('json/delete/'+from.split('@')[0]+'.json')) 
-                        {  
-                            fs.existsSync('json/delete/'+from.split('@')[0]+'.json') 
-                            const delete_umsg = JSON.parse(fs.readFileSync('json/delete/'+from.split('@')[0]+'.json'));
-                            await Ammu.sendMessage(from, { delete: delete_umsg }); //delete_msg.json{"remoteJid":"919188346721@s.whatsapp.net","fromMe":true,"id":"BAE524A0A2501657"}
-                            fs.writeFileSync('json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
+                        var d_data = await getid(from,'delete');
+                        if (d_data === false) {
+                            
+                            await setid(from, 'delete', sendMsg.key.id);
                         } else {
-                            fs.writeFileSync('json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
+                            
+                            await Ammu.sendMessage(from, { delete: {"remoteJid": from,"fromMe":true,"id":d_data.msg_id} });
+                            await deleteid(from, 'delete');
+                            await setid(from, 'delete', sendMsg.key.id);
                         }
                     } catch(err) {
-                        fs.existsSync('json/delete/'+from.split('@')[0]+'.json')
-                        fs.writeFileSync('json/delete/'+from.split('@')[0]+'.json', JSON.stringify(sendMsg.key));
                         console.log('[ERROR] => Message delete Akkanilla! => ',err);
+                        var d_data = await getid(from,'delete');
+                        if (d_data === false) {
+                            
+                            await setid(from, 'delete', sendMsg.key.id);
+                        } else {
+                            
+                            await Ammu.sendMessage(from, { delete: {"remoteJid": from,"fromMe":true,"id":d_data.msg_id} });
+                            await deleteid(from, 'delete');
+                            await setid(from, 'delete', sendMsg.key.id);
+                        }
                     }
             }
 
@@ -382,7 +449,7 @@ async function BlackSudo () {
 
 
                 case 'log':
-                    console.log(pushname,msg.pushName,msg.key.remoteJid,args);
+                    console.log(pushname,msg.pushName,msg.key.remoteJid,msg.key.id,args);
                     //delete_old(from);
                     var loadi = await Ammu.sendMessage(from, { text: '@'+pushname, mention: [sender]});
                     

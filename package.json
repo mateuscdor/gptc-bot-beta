@@ -27,12 +27,18 @@
     "@hapi/boom": "^9.1.4",
     "axios": "^0.26.1",
     "chalk": "^5.0.1",
+    "express": "^4.17.3",
     "fluent-ffmpeg": "^2.1.2",
+    "fs": "^0.0.1-security",
     "moment-timezone": "^0.5.34",
+    "mysql": "^2.18.1",
     "pino": "^7.9.2",
+    "Promise": "^1.0.5",
     "qrcode": "^1.5.0",
     "qrcode-terminal": "^0.12.0",
     "request": "^2.88.2",
+    "sequelize": "^6.19.0",
+    "sqlite3": "^5.0.4",
     "supervisor": "^0.12.0"
   }
 }
