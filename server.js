@@ -30,7 +30,7 @@ async function BlackSudo () {
 			console.log("Connection Status: ",connection);
             console.log('Server started');
 		};
-        if (connection === 'open') return Ammu.sendMessage('919188346721@s.whatsapp.net',{ text: 'IAM ONLINE '});
+        //if (connection === 'open') return Ammu.sendMessage('919188346721@s.whatsapp.net',{ text: 'IAM ONLINE '});
 		if (connection === "close") {
 			let reason = new Boom(lastDisconnect.error).output.statusCode;
 			if (reason === DisconnectReason.badSession) {
