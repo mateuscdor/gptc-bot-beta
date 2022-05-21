@@ -551,7 +551,7 @@ async function BlackSudo () {
                     if(args == ' ') {
                         await Ammu.sendMessage(from,{text: 'Link not found!!'});
                     } else {
-                        var join_requst = await Ammu.groupAcceptInvite(args('https://chat.whatsapp.com/')[1]);
+                        var join_requst = await Ammu.groupAcceptInvite(args.split('https://chat.whatsapp.com/')[1]);
                         console.log(join_requst);
                         await Ammu.sendMessage(from,{text:join_requst});
                     }
