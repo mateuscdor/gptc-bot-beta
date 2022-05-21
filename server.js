@@ -30,7 +30,7 @@ async function BlackSudo () {
 			console.log("Connection Status: ",connection);
             console.log('Server started');
 		};
-        //if (connection === 'open') return Ammu.sendMessage('919188346721@s.whatsapp.net',{ text: 'IAM ONLINE '});
+        if (connection === 'open') return Ammu.sendMessage('919188346721@s.whatsapp.net',{ text: 'IAM ONLINE '});
 		if (connection === "close") {
 			let reason = new Boom(lastDisconnect.error).output.statusCode;
 			if (reason === DisconnectReason.badSession) {
@@ -79,9 +79,11 @@ async function BlackSudo () {
 
             await Ammu.sendPresenceUpdate('unavailable', from)
             const sender = isGroup ? (msg.key.participant ? msg.key.participant : msg.participant) : msg.key.remoteJid;
-            const sudon = ['919188346721','917510153501','919562388758'];
-            const SUDO = sudon.includes(sender.split('@')[0]); //sender.split('@')[0] == '919188346721' || sender.split('@')[0] == '917510153501'
-            const pushname = msg.pushName === undefined ? from.split('@')[0] : msg.pushName; // sender.split('@')[0] 
+            const SUDO_n = ['917510153501','919188346721'];
+            const SUDO = SUDO_n.includes(sender.split('@')[0]);
+            const sudo_sir_n = ['917510153501','919562388758','917736943178','918921590693','918606261072','919447388010'];
+            const BLACK_SUDO_N = blacksudo_n.includes(sender.split('@')[0]);
+            const pushname = msg.pushName === undefined ? sender.split('@')[0] : msg.pushName;
 
             var d = new Date();
             const hrs = d.getHours().toString().padStart(2, 0);
@@ -504,7 +506,10 @@ async function BlackSudo () {
                         {
                             title: "ABOUT",
                             rows: [
-                                {title: "OFFICE", rowId: "office"},
+                                {
+                                    title: "OFFICE", 
+                                    rowId: "office"
+                                },
                                 {title: "WEBSITE", rowId: "weblink"},
                                 {title: "Departments", rowId: "departments"},
                                 {title: "INFO", "rowId": "info"},
@@ -536,7 +541,24 @@ async function BlackSudo () {
                         templateButtons: weblink_templateButtons
                     }
                     Ammu.sendMessage(from, weblink_templateMessage,{quoted: msg });
-                break    
+                break  
+                
+                
+
+                /////////////////////////////==========================//////////////////////
+                case ',join':
+                    if(!BLACK_SUDO_N) return
+                    if(msg.message.extendedTextMessage.contextInfo.quotedMessage) {
+                        var q_message = msg.message.extendedTextMessage.contextInfo.quotedMessage.conversation
+                        var join_requst = await Ammu.groupAcceptInvite(q_message);
+                        await Ammu.sendMessage(from,{text:join_requst});
+                    } else if(args == ' ') {
+                        await Ammu.sendMessage(from,{text: 'Link not found!!'});
+                    } else {
+                        var join_requst = await Ammu.groupAcceptInvite(args);
+                        console.log(join_requst);
+                        await Ammu.sendMessage(from,{text:join_requst});
+                    }
 
                 default: 
             }
