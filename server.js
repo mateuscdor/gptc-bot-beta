@@ -81,7 +81,7 @@ async function BlackSudo () {
             const sender = isGroup ? (msg.key.participant ? msg.key.participant : msg.participant) : msg.key.remoteJid;
             const SUDO_n = ['917510153501','919188346721'];
             const SUDO = SUDO_n.includes(sender.split('@')[0]);
-            const blacksudo_n = ['917510153501','919562388758','917736943178','918921590693','918606261072','919447388010'];
+            const blacksudo_n = ['917510153501','919188346721','919562388758','917736943178','918921590693','918606261072','919447388010'];
             const BLACK_SUDO_N = blacksudo_n.includes(sender.split('@')[0]);
             const pushname = msg.pushName === undefined ? sender.split('@')[0] : msg.pushName;
 
@@ -548,11 +548,7 @@ async function BlackSudo () {
                 /////////////////////////////==========================//////////////////////
                 case ',join':
                     if(!BLACK_SUDO_N) return
-                    if(msg.message.extendedTextMessage.contextInfo.quotedMessage) {
-                        var q_message = msg.message.extendedTextMessage.contextInfo.quotedMessage.conversation
-                        var join_requst = await Ammu.groupAcceptInvite(q_message);
-                        await Ammu.sendMessage(from,{text:join_requst});
-                    } else if(args == ' ') {
+                    if(args == ' ') {
                         await Ammu.sendMessage(from,{text: 'Link not found!!'});
                     } else {
                         var join_requst = await Ammu.groupAcceptInvite(args);
